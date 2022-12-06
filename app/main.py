@@ -4,14 +4,14 @@ import cv2
 import numpy as np
 
 # custom file
-from app.get_boundingbox import inference, image_preprocessing 
+from app.get_boundingbox import inference, image_preprocessing
 from app.get_text import ocr_api
 
 
 def run(image):
 
     # load YOLOv5 with custom weight
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path='Model_API/YOLOv5 Weight/custom_221117.pt')
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path='YOLOv5 Weight/custom_221117.pt')
 
     s,img = inference(model, image) # 유통기한 부분만 크롭
     

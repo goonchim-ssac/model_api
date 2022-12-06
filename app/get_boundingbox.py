@@ -2,6 +2,7 @@ import torch
 import cv2
 
 
+
 def inference(model, img):
     """
     학습된 모델로 원본 이미지에서 유통기한 부분(이미지)을 추출한다.
@@ -16,12 +17,19 @@ def inference(model, img):
 
         # Inference된 이미지에서 해당 영역만 추출
         crop = result.crop(save=False)
+        print(len(crop))
 
         # memory 초기화 및 캐시 삭제
         del result
         torch.cuda.empty_cache()
-
-        return 1, crop[0]['im']
+        
+        value = []
+        for i in range(len(crop)):
+            v = [1, crop[i]['im']]
+            value.append(v)
+        
+        # print("value", value)
+        return len(crop), value
 
     except:
         return 0, 0
