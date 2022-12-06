@@ -31,15 +31,11 @@ for file_name in file_list:
     image = cv2.resize(image, (500, 500))
 
     nob, boxes = inference(model, image) # nob: num of boxes # 유통기한 부분만 크롭
-    # for i in range(nob):
-    #     s, img = boxes[i]
     
     box_images = [x[1] for x in boxes]
     box_images = [cv2.resize(x, (500, 200)) for x in box_images]
     
     vertical = np.vstack([image, *box_images])
-    # # cv2.imshow(file_name, image)
-    # # cv2.imshow(file_name, img) # 크롭된 유통기한 부분 확인
     cv2.imshow(file_name, vertical)
 
     key = cv2.waitKey()
