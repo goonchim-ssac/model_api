@@ -13,29 +13,30 @@ def run(image):
     # load YOLOv5 with custom weight
     model = torch.hub.load('ultralytics/yolov5', 'custom', path='YOLOv5 Weight/custom_221117.pt')
 
-    s,img = inference(model, image) # 유통기한 부분만 크롭
-    
-    if s: # bounding box 찾은 경우
-        pre_img = image_preprocessing(img) # 글자 잘 인식하도록 전처리
-        text = ocr_api(pre_img) # 이미지에서 텍스트 추출
-        return text
-    
-    else: # bounding box 찾지 못한 경우
-        print("인식하지 못했습니다")
-        return
+    nob, boxes = inference(model, image) # nob: num of boxes # 유통기한 부분만 크롭
+    # box_images = [x[1] for x in boxes]
+
+    for i in range(nob):
+        s, img = boxes[i]
+        texts = []
+
+        if s: # bounding box 찾은 경우
+            pre_img = image_preprocessing(img) # 글자 잘 인식하도록 전처리
+            text = ocr_api(pre_img) # 이미지에서 텍스트 추출
+            texts.append(text)
+
+        else: # bounding box 찾지 못한 경우
+            print("인식하지 못했습니다")
+
+    return texts # [[box1 ocr 결과], [box2 ocr 결과], ...]
 
 
 app = FastAPI()
 
+
 @app.post("/exp_date")
 def predict_ExpDate(file: bytes = File()):
     decoded = cv2.imdecode(np.frombuffer(file, np.uint8), cv2.IMREAD_COLOR)
-    result = run(decoded)
+    result = run(decoded) # box 개수만큼의 ocr 결과 리스트
 
     return {'exp_date': result}
-
-
-# @app.post("/test")
-# def test(file: bytes = File()):
-#     decoded = cv2.imdecode(np.frombuffer(file, np.uint8), cv2.IMREAD_COLOR)
-#     cv2.imwrite(f"test.jpg", decoded)

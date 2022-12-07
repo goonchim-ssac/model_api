@@ -17,7 +17,6 @@ def inference(model, img):
 
         # Inference된 이미지에서 해당 영역만 추출
         crop = result.crop(save=False)
-        print(len(crop))
 
         # memory 초기화 및 캐시 삭제
         del result
