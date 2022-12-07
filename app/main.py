@@ -16,7 +16,7 @@ def run(image):
     nob, boxes = inference(model, image) # nob: num of boxes # 유통기한 부분만 크롭
     # box_images = [x[1] for x in boxes]
 
-    for i in range(nob):
+    for i in range(nob): # 각 박스마다 전처리 후 OCR 하여 texts에 추가
         s, img = boxes[i]
         texts = []
 
@@ -28,7 +28,7 @@ def run(image):
         else: # bounding box 찾지 못한 경우
             print("인식하지 못했습니다")
 
-    return texts # [[box1 ocr 결과], [box2 ocr 결과], ...]
+    return texts # [['box1', 'ocr', '결과'], ['box2', ' ocr', '결과'], ...]
 
 
 app = FastAPI()

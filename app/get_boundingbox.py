@@ -27,7 +27,6 @@ def inference(model, img):
             v = [1, crop[i]['im']]
             value.append(v)
         
-        # print("value", value)
         return len(crop), value
 
     except:
